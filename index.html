@@ -539,6 +539,45 @@
   .kb-key.wide{ max-width:68px; flex:1.6; }
   .kb-key.on{ background:rgba(255,255,255,0.55); box-shadow:0 0 0 2px rgba(160,215,255,0.85), 0 0 16px rgba(160,215,255,0.8); }
 
+  /* ---------- rooms ---------- */
+  .nc-tabs{ display:flex; gap:4px; margin-bottom:14px; background:rgba(255,255,255,0.3); border-radius:12px; padding:3px; }
+  .nc-tab{
+    flex:1; padding:8px 4px; border:none; background:none; border-radius:10px; cursor:pointer;
+    font-family:var(--display); font-weight:600; font-size:12.5px; color:var(--ink-soft);
+  }
+  .nc-tab.active{ background:rgba(255,255,255,0.7); color:var(--ink); }
+  .nc-pane{ display:none; }
+  .nc-pane label.opt{ display:flex; gap:8px; align-items:flex-start; font-size:13px; margin:8px 0; cursor:pointer; line-height:1.45; }
+  .nc-pane label.opt small{ display:block; color:var(--ink-soft); font-size:11.5px; }
+  #rm-name, #ex-filter{
+    width:100%; padding:11px 14px; border-radius:14px; border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.5); font-size:14.5px; font-family:var(--display); color:var(--ink); outline:none;
+  }
+  #rm-create{
+    width:100%; margin-top:10px; padding:11px; border-radius:14px; border:1px solid var(--glass-border);
+    background:linear-gradient(160deg,#4a8a86,#2f6662); color:#fff; font-weight:600; font-family:var(--display); cursor:pointer;
+  }
+  #rm-msg, #ex-msg{ color:var(--accent-stamp); font-size:12px; margin:8px 0 0; min-height:16px; }
+  #ex-list{ max-height:46vh; overflow-y:auto; margin-top:8px; }
+  .cn-avatar.room{ background:rgba(47,102,98,0.22); }
+  .cn-sender{ font-size:11px; font-weight:600; color:var(--ink-soft); margin:0 4px 3px; }
+  #members-overlay{
+    display:none; position:fixed; inset:0; z-index:66; background:rgba(15,35,33,0.35);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  #members-box{
+    width:min(360px, 100%); max-height:70vh; display:flex; flex-direction:column;
+    background:var(--glass-strong); border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-radius:22px; padding:20px; box-shadow:0 30px 70px rgba(0,0,0,0.3);
+  }
+  #members-box h2{ margin:0 0 10px; font-size:16px; }
+  #mb-list{ overflow-y:auto; min-height:0; }
+  #mb-close{
+    margin-top:12px; padding:10px; border-radius:12px; border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.5); font-weight:600; font-family:var(--display); cursor:pointer;
+  }
+
   ::selection{ background:rgba(25,51,49,0.2); }
 </style>
 </head>
@@ -598,7 +637,7 @@
       </div>
       <div class="cn-tools"><div class="icon-btn" id="btn-chatmenu" title="更多">⋯</div></div>
     </div>
-    <div id="chatmenu"><button id="cm-block">封鎖此人</button></div>
+    <div id="chatmenu"><button id="cm-members">查看成員</button><button id="cm-invite">邀請成員</button><button id="cm-block">封鎖此人</button><button id="cm-leave">離開聊天室</button></div>
     <div class="cn-tape-wrap"><div id="cn-tape"></div></div>
     <div id="cn-ctx"><div><span class="label" id="cn-ctx-label"></span><span id="cn-ctx-text"></span></div><button id="cn-ctx-cancel">✕</button></div>
     <div class="cn-dock">
@@ -627,11 +666,37 @@
 
 <div id="newchat-overlay">
   <div id="newchat-box">
-    <h2>新增聊天</h2>
-    <p>輸入對方的使用者 ID 來找人。</p>
-    <div class="nc-row"><input id="nc-input" placeholder="@使用者ID" autocapitalize="none" autocomplete="off"><button id="nc-search">搜尋</button></div>
-    <div id="nc-msg"></div>
-    <div id="nc-result"></div>
+    <div class="nc-tabs">
+      <button class="nc-tab active" data-nc="find">找人</button>
+      <button class="nc-tab" data-nc="create">建立聊天室</button>
+      <button class="nc-tab" data-nc="explore">探索</button>
+    </div>
+    <div class="nc-pane" id="nc-find">
+      <p>輸入對方的使用者 ID，開始一對一聊天。</p>
+      <div class="nc-row"><input id="nc-input" placeholder="@使用者ID" autocapitalize="none" autocomplete="off"><button id="nc-search">搜尋</button></div>
+      <div id="nc-msg"></div>
+      <div id="nc-result"></div>
+    </div>
+    <div class="nc-pane" id="nc-create">
+      <input id="rm-name" maxlength="40" placeholder="聊天室名稱">
+      <label class="opt"><input type="radio" name="rmvis" value="public" checked><span>公開<small>所有人都能在「探索」找到並加入</small></span></label>
+      <label class="opt"><input type="radio" name="rmvis" value="private"><span>私人<small>只有被邀請的成員才進得來</small></span></label>
+      <div id="rm-msg"></div>
+      <button id="rm-create">建立</button>
+    </div>
+    <div class="nc-pane" id="nc-explore">
+      <input id="ex-filter" placeholder="搜尋公開聊天室">
+      <div id="ex-msg"></div>
+      <div id="ex-list"></div>
+    </div>
+  </div>
+</div>
+
+<div id="members-overlay">
+  <div id="members-box">
+    <h2>聊天室成員</h2>
+    <div id="mb-list"></div>
+    <button id="mb-close">關閉</button>
   </div>
 </div>
 <div id="toast"></div>
@@ -690,7 +755,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
     getFirestore, collection, doc, addDoc, updateDoc, deleteDoc,
-    onSnapshot, query, orderBy, setDoc, getDoc, writeBatch, where, limitToLast
+    onSnapshot, query, orderBy, setDoc, getDoc, getDocs, writeBatch, where, limit, limitToLast, arrayUnion, arrayRemove
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
@@ -712,7 +777,7 @@
   const auth = getAuth(fbApp);
 
   window.__fb = { db, auth, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, setDoc,
-                  getDoc, writeBatch, where, limitToLast, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged };
+                  getDoc, getDocs, writeBatch, where, limit, limitToLast, arrayUnion, arrayRemove, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged };
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
 
@@ -1562,7 +1627,7 @@ async function loadProfile(uid){
   }
   profilePending.delete(uid);
   renderConvList();
-  if(activeConvId) renderChatHeader();
+  if(activeConvId){ renderChatHeader(); if(msgs.length) renderChat(); }
 }
 function nameOf(uid){
   const p = profileOf(uid);
@@ -1632,6 +1697,7 @@ function stopAll(){
   $('chatapp').style.display = 'none';
   $('app').style.display = 'none';
   $('newchat-overlay').style.display = 'none';
+  $('members-overlay').style.display = 'none';
   $('gate').style.display = 'flex';
 }
 
@@ -1651,27 +1717,32 @@ function renderConvList(){
   if(!me) return;
   const el = $('conv-list');
   let rows = convs
-    .filter(c => c.lastMessage || c.createdBy === me.uid)
-    .map(c => ({ c, other: c.members.find(u => u !== me.uid) || me.uid }));
+    .filter(c => c.type === 'room' || c.lastMessage || c.createdBy === me.uid)
+    .map(c => ({ c, isRoom: c.type === 'room', other: c.members.find(u => u !== me.uid) || me.uid }));
   const q = listFilter.trim().toLowerCase();
   if(q){
     rows = rows.filter(r => {
+      if(r.isRoom) return (r.c.name || '').toLowerCase().includes(q);
       const p = profileOf(r.other) || {};
       return (p.nickname || '').toLowerCase().includes(q) || (p.handle || '').includes(q);
     });
   }
   rows.sort((a,b) => (b.c.lastAt || '').localeCompare(a.c.lastAt || ''));
   if(rows.length === 0){
-    el.innerHTML = '<div class="cn-empty">' + (q ? '找不到符合的聊天' : '還沒有聊天，按右上角 ✎ 輸入朋友的 ID 開始吧') + '</div>';
+    el.innerHTML = '<div class="cn-empty">' + (q ? '找不到符合的聊天' : '還沒有聊天，按右上角 ✎ 找朋友，或建立、加入聊天室吧') + '</div>';
     return;
   }
-  el.innerHTML = rows.map(({c, other}) => {
-    const nm = nameOf(other);
+  el.innerHTML = rows.map(({c, other, isRoom}) => {
+    const nm = isRoom ? c.name : nameOf(other);
     const lm = c.lastMessage;
-    const preview = lm ? ((lm.senderUid === me.uid ? '你：' : '') + escapeHTML(lm.text)) : '（尚未傳送訊息）';
+    let preview = isRoom ? '（還沒有訊息）' : '（尚未傳送訊息）';
+    if(lm){
+      const who = lm.senderUid === me.uid ? '你：' : (isRoom ? nameOf(lm.senderUid) + '：' : '');
+      preview = escapeHTML(who + lm.text);
+    }
     const unread = isUnread(c);
     return `<div class="conv-row${unread ? ' unread' : ''}" data-cid="${c.id}">
-      <div class="cn-avatar big">${escapeHTML(initial(nm))}</div>
+      <div class="cn-avatar big${isRoom ? ' room' : ''}">${isRoom ? '#' : escapeHTML(initial(nm))}</div>
       <div class="conv-main"><div class="conv-name">${escapeHTML(nm)}</div><div class="conv-last">${preview}</div></div>
       <div class="conv-side"><div class="conv-time">${fmtListTime(c.lastAt)}</div>${unread ? '<span class="unread-dot"></span>' : ''}</div>
     </div>`;
@@ -1679,11 +1750,26 @@ function renderConvList(){
 }
 
 /* ---------- open / close a conversation ---------- */
+function activeConv(){ return convs.find(x => x.id === activeConvId) || null; }
 function otherOfActive(){
-  const c = convs.find(x => x.id === activeConvId);
-  return c ? c.members.find(u => u !== me.uid) : null;
+  const c = activeConv();
+  return (c && c.type !== 'room') ? c.members.find(u => u !== me.uid) : null;
 }
 function renderChatHeader(){
+  const c = activeConv();
+  if(!c) return;
+  const isRoom = c.type === 'room';
+  $('cm-block').style.display = isRoom ? 'none' : 'block';
+  $('cm-members').style.display = isRoom ? 'block' : 'none';
+  $('cm-invite').style.display = isRoom ? 'block' : 'none';
+  $('cm-leave').style.display = isRoom ? 'block' : 'none';
+  $('cn-avatar').classList.toggle('room', isRoom);
+  if(isRoom){
+    $('cn-title').textContent = c.name;
+    $('cn-avatar').textContent = '#';
+    $('cn-sub').textContent = c.members.length + ' 位成員 · ' + (c.visibility === 'public' ? '公開' : '私人');
+    return;
+  }
   const other = otherOfActive();
   if(!other) return;
   const nm = nameOf(other), p = profileOf(other);
@@ -1733,6 +1819,8 @@ function renderChat(){
     chatInitial = false;
     return;
   }
+  const _c = activeConv();
+  const isRoom = !!_c && _c.type === 'room';
   let html = '', prevDay = '', lastSelf = false;
   for(const m of msgs){
     const self = m.senderUid === me.uid;
@@ -1753,6 +1841,7 @@ function renderChat(){
       acts.push(`<button class="act-btn" data-cact="delete" data-id="${m.id}">刪除</button>`);
     }
     html += `<div class="cn-row ${self ? 'self' : 'other'}${isNew}" id="cm-${m.id}">
+      ${(!self && isRoom) ? '<div class="cn-sender">' + escapeHTML(nameOf(m.senderUid)) + '</div>' : ''}
       ${chip}
       <div class="cn-bubble">${escapeHTML(m.text)}</div>
       <div class="cn-meta">${fmtTime(m.at)}${m.isEdited ? ' · 已編輯' : ''}</div>
@@ -1823,13 +1912,23 @@ async function toggleBlock(){
   $('chatmenu').style.display = 'none';
 }
 
-/* ---------- new chat ---------- */
-function openNewChat(){
+/* ---------- new chat / rooms ---------- */
+let exRooms = [];
+function ncTab(name){
+  ['find','create','explore'].forEach(n => { $('nc-' + n).style.display = (n === name) ? 'block' : 'none'; });
+  document.querySelectorAll('.nc-tab').forEach(b => b.classList.toggle('active', b.dataset.nc === name));
+  if(name === 'explore') loadExplore();
+  if(name === 'find') setTimeout(()=> $('nc-input').focus(), 50);
+  if(name === 'create') setTimeout(()=> $('rm-name').focus(), 50);
+}
+function openNewChat(tab){
   $('newchat-overlay').style.display = 'flex';
   $('nc-input').value = ''; $('nc-msg').textContent = ''; $('nc-result').innerHTML = '';
-  setTimeout(()=> $('nc-input').focus(), 50);
+  $('rm-name').value = ''; $('rm-msg').textContent = '';
+  ncTab(tab || 'find');
 }
 function closeNewChat(){ $('newchat-overlay').style.display = 'none'; }
+
 async function ncSearch(){
   const h = $('nc-input').value.trim().toLowerCase().replace(/^@/, '');
   const msg = $('nc-msg'), res = $('nc-result');
@@ -1863,6 +1962,102 @@ async function startDm(uid){
   }
   closeNewChat();
   openConv(id);
+}
+
+async function createRoom(){
+  const name = $('rm-name').value.trim();
+  const vis = document.querySelector('input[name="rmvis"]:checked').value;
+  const msg = $('rm-msg');
+  msg.textContent = '';
+  if(name.length < 1 || name.length > 40){ msg.textContent = '聊天室名稱需要 1–40 個字。'; return; }
+  const { db, doc, writeBatch } = F();
+  const now = new Date().toISOString();
+  const ref = doc(convCol());
+  const batch = writeBatch(db);
+  batch.set(ref, {
+    type:'room', name, visibility: vis, members:[me.uid], createdBy: me.uid, createdAt: now,
+    lastMessage: null, lastAt: now, lastRead: {}
+  });
+  if(vis === 'public') batch.set(doc(db, 'publicRooms', ref.id), { name, createdBy: me.uid, createdAt: now });
+  try{
+    await batch.commit();
+    closeNewChat();
+    openConv(ref.id);
+  }catch(e){ msg.textContent = '建立失敗（' + (e.code || e.message) + '）。'; }
+}
+
+async function loadExplore(){
+  const msg = $('ex-msg');
+  msg.textContent = '載入中…'; $('ex-list').innerHTML = '';
+  try{
+    const { getDocs, query, collection, db, limit } = F();
+    const snap = await getDocs(query(collection(db, 'publicRooms'), limit(60)));
+    exRooms = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      .sort((a,b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+    msg.textContent = '';
+    renderExplore();
+  }catch(e){ msg.textContent = '載入失敗（' + (e.code || e.message) + '）。'; }
+}
+function renderExplore(){
+  const q = $('ex-filter').value.trim().toLowerCase();
+  const rows = exRooms.filter(r => !q || (r.name || '').toLowerCase().includes(q));
+  $('ex-list').innerHTML = rows.length ? rows.map(r => {
+    const joined = convs.some(c => c.id === r.id);
+    return `<div class="conv-row" data-rid="${r.id}">
+      <div class="cn-avatar big room">#</div>
+      <div class="conv-main"><div class="conv-name">${escapeHTML(r.name || '')}</div><div class="conv-last">公開聊天室</div></div>
+      <div class="conv-side"><div class="conv-time">${joined ? '進入 ›' : '加入 ›'}</div></div>
+    </div>`;
+  }).join('') : '<div class="cn-empty">目前沒有公開的聊天室</div>';
+}
+async function joinRoom(rid){
+  if(!convs.some(c => c.id === rid)){
+    try{ await F().updateDoc(convDoc(rid), { members: F().arrayUnion(me.uid) }); }
+    catch(e){ toast('無法加入這個聊天室'); return; }
+  }
+  closeNewChat();
+  openConv(rid);
+}
+
+async function showMembers(){
+  const c = activeConv();
+  if(!c || c.type !== 'room') return;
+  $('chatmenu').style.display = 'none';
+  $('members-overlay').style.display = 'flex';
+  $('mb-list').innerHTML = '<div class="cn-empty">載入中…</div>';
+  const list = c.members.slice(0, 60);
+  await Promise.all(list.map(loadProfile));
+  $('mb-list').innerHTML = list.map(uid => {
+    const p = profileOf(uid) || {};
+    return `<div class="conv-row"><div class="cn-avatar big">${escapeHTML(initial(p.nickname))}</div>
+      <div class="conv-main"><div class="conv-name">${escapeHTML(p.nickname || '…')}${uid === c.createdBy ? ' 👑' : ''}</div><div class="conv-last">${p.handle ? '@' + escapeHTML(p.handle) : ''}</div></div></div>`;
+  }).join('') + (c.members.length > 60 ? '<div class="cn-empty">…共 ' + c.members.length + ' 位成員</div>' : '');
+}
+async function inviteToRoom(){
+  const c = activeConv();
+  if(!c) return;
+  $('chatmenu').style.display = 'none';
+  const h = (prompt('輸入要邀請的使用者 ID') || '').trim().toLowerCase().replace(/^@/, '');
+  if(!h) return;
+  if(!/^[a-z0-9_]{3,20}$/.test(h)){ toast('ID 格式不正確'); return; }
+  try{
+    const hs = await F().getDoc(F().doc(F().db, 'handles', h));
+    if(!hs.exists()){ toast('找不到這個 ID'); return; }
+    const uid = hs.data().uid;
+    if(c.members.includes(uid)){ toast('對方已經在聊天室裡了'); return; }
+    await F().updateDoc(convDoc(c.id), { members: F().arrayUnion(uid) });
+    toast('已邀請');
+  }catch(e){ toast('邀請失敗'); }
+}
+async function leaveRoom(){
+  const c = activeConv();
+  if(!c) return;
+  $('chatmenu').style.display = 'none';
+  if(!confirm('要離開「' + c.name + '」嗎？')) return;
+  const id = c.id;
+  closeConv();
+  try{ await F().updateDoc(convDoc(id), { members: F().arrayRemove(me.uid) }); toast('已離開聊天室'); }
+  catch(e){ toast('離開失敗'); }
 }
 
 /* ---------- UI wiring ---------- */
@@ -1926,8 +2121,21 @@ function bindMessengerUI(){
   });
   document.addEventListener('click', ()=>{ $('chatmenu').style.display = 'none'; });
   $('cm-block').addEventListener('click', toggleBlock);
+  $('cm-members').addEventListener('click', showMembers);
+  $('cm-invite').addEventListener('click', inviteToRoom);
+  $('cm-leave').addEventListener('click', leaveRoom);
 
-  $('btn-newchat').addEventListener('click', openNewChat);
+  $('btn-newchat').addEventListener('click', ()=> openNewChat('find'));
+  document.querySelectorAll('.nc-tab').forEach(b => b.addEventListener('click', ()=> ncTab(b.dataset.nc)));
+  $('rm-create').addEventListener('click', createRoom);
+  $('rm-name').addEventListener('keydown', (e)=>{ if(e.key === 'Enter' && !e.isComposing){ e.preventDefault(); createRoom(); } });
+  $('ex-filter').addEventListener('input', renderExplore);
+  $('ex-list').addEventListener('click', (e)=>{
+    const row = e.target.closest('.conv-row[data-rid]');
+    if(row) joinRoom(row.dataset.rid);
+  });
+  $('members-overlay').addEventListener('click', (e)=>{ if(e.target.id === 'members-overlay') $('members-overlay').style.display = 'none'; });
+  $('mb-close').addEventListener('click', ()=>{ $('members-overlay').style.display = 'none'; });
   $('newchat-overlay').addEventListener('click', (e)=>{ if(e.target.id === 'newchat-overlay') closeNewChat(); });
   $('nc-search').addEventListener('click', ncSearch);
   $('nc-input').addEventListener('compositionstart', ()=>{ ncComposing = true; });
