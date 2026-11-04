@@ -437,6 +437,108 @@
   #pw-box.shake{ animation:shake .35s ease; }
   @keyframes shake{ 0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 40%{transform:translateX(8px);} 60%{transform:translateX(-5px);} 80%{transform:translateX(5px);} }
 
+  /* ---------- Messenger screens ---------- */
+  .scr{ display:none; flex:1; min-height:0; flex-direction:column; }
+  .scr.show{ display:flex; }
+  .cn-tape-wrap{ min-height:0; }
+  .sub{ font-family:var(--mono); font-size:10.5px; color:var(--ink-soft); opacity:.8; }
+  .setup-card{
+    margin:auto; width:min(340px, 88%); background:var(--glass-strong);
+    border:1px solid var(--glass-border); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border-radius:24px; padding:28px 24px; box-shadow:0 20px 60px var(--glass-shadow);
+  }
+  .setup-card h2{ margin:0 0 6px; font-size:19px; }
+  .setup-card p{ margin:0 0 14px; font-size:12.5px; color:var(--ink-soft); line-height:1.6; }
+  .setup-card label{ display:block; font-size:12px; font-weight:600; margin:10px 0 5px; }
+  .setup-card input, .list-search input, #nc-input{
+    width:100%; padding:11px 14px; border-radius:14px; border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.5); font-size:14.5px; font-family:var(--display); color:var(--ink); outline:none;
+  }
+  .setup-card input:focus, .list-search input:focus, #nc-input:focus{ background:rgba(255,255,255,0.75); }
+  #su-error, #nc-msg{ color:var(--accent-stamp); font-size:12px; margin:8px 0 0; min-height:16px; line-height:1.5; }
+  .setup-card .id-btn{ margin-top:14px; margin-bottom:0; }
+  .list-search{ padding:10px 14px 4px; }
+  #conv-list{ flex:1; min-height:0; overflow-y:auto; padding:6px 8px 12px; display:flex; flex-direction:column; gap:2px; }
+  #conv-list::-webkit-scrollbar{ width:6px; }
+  #conv-list::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.5); border-radius:6px; }
+  .conv-row{ display:flex; align-items:center; gap:12px; padding:10px; border-radius:16px; cursor:pointer; transition:background .15s; }
+  .conv-row:hover{ background:rgba(255,255,255,0.35); }
+  .cn-avatar.big{ width:46px; height:46px; font-size:17px; flex:none; }
+  .conv-main{ flex:1; min-width:0; }
+  .conv-name{ font-weight:600; font-size:15px; }
+  .conv-last{ font-size:12.5px; color:var(--ink-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .conv-row.unread .conv-name, .conv-row.unread .conv-last{ font-weight:700; color:var(--ink); }
+  .conv-side{ display:flex; flex-direction:column; align-items:flex-end; gap:6px; flex:none; }
+  .conv-time{ font-size:10.5px; color:var(--ink-soft); font-family:var(--mono); }
+  .unread-dot{ width:10px; height:10px; border-radius:50%; background:#2f6662; }
+  #newchat-overlay{
+    display:none; position:fixed; inset:0; z-index:65; background:rgba(15,35,33,0.35);
+    align-items:center; justify-content:center; padding:20px;
+  }
+  #newchat-box{
+    width:min(360px, 100%); background:var(--glass-strong); border:1px solid var(--glass-border);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+    border-radius:22px; padding:20px; box-shadow:0 30px 70px rgba(0,0,0,0.3);
+  }
+  #newchat-box h2{ margin:0 0 4px; font-size:16px; }
+  #newchat-box p{ margin:0 0 12px; font-size:12px; color:var(--ink-soft); }
+  .nc-row{ display:flex; gap:8px; }
+  .nc-row button{
+    flex:none; padding:0 16px; border-radius:14px; border:1px solid var(--glass-border);
+    background:rgba(255,255,255,0.6); font-weight:600; cursor:pointer; font-family:var(--display);
+  }
+  #nc-result{ margin-top:10px; }
+  #chatmenu{
+    display:none; position:absolute; top:58px; right:14px; z-index:8; min-width:130px;
+    background:var(--glass-strong); border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    border-radius:14px; padding:6px; box-shadow:0 14px 40px var(--glass-shadow);
+  }
+  #chatmenu button{
+    display:block; width:100%; text-align:left; padding:9px 12px; border:none; background:none;
+    border-radius:10px; cursor:pointer; font-family:var(--display); font-size:13.5px; color:var(--ink);
+  }
+  #chatmenu button:hover{ background:rgba(255,255,255,0.5); }
+  #toast{
+    position:fixed; left:50%; bottom:90px; transform:translateX(-50%); z-index:90;
+    background:rgba(25,51,49,0.92); color:#eafaf3; padding:9px 16px; border-radius:14px;
+    font-size:13px; opacity:0; pointer-events:none; transition:opacity .25s ease; max-width:86vw; text-align:center;
+  }
+
+  /* ---------- tab bar + water screen ---------- */
+  .scr{ position:relative; }
+  #tabbar{
+    display:none; background:var(--glass-strong); border-top:1px solid var(--glass-border);
+    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px); padding:6px 10px 10px;
+  }
+  .tab-nav{
+    flex:1; padding:9px 8px; border:none; background:none; border-radius:14px; cursor:pointer;
+    font-family:var(--display); font-weight:600; font-size:13px; color:var(--ink-soft);
+  }
+  .tab-nav.active{ background:rgba(255,255,255,0.5); color:var(--ink); }
+  #water-wrap{ flex:1; min-height:0; position:relative; overflow:hidden; }
+  #water-canvas{ position:absolute; inset:0; width:100%; height:100%; display:block; touch-action:none; }
+  #water-dbg{
+    position:absolute; left:10px; top:8px; right:10px; font-family:var(--mono); font-size:11px;
+    color:var(--ink); background:rgba(255,255,255,0.5); border-radius:8px; padding:4px 8px; display:none; z-index:3;
+  }
+  #glass-kb{
+    position:absolute; left:0; right:0; bottom:0; z-index:4; padding:12px 8px 16px;
+    background:rgba(255,255,255,0.22); border-top:1px solid var(--glass-border);
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+    transform:translateY(110%); transition:transform .55s cubic-bezier(.2,.8,.2,1);
+    display:flex; flex-direction:column; gap:7px; touch-action:manipulation; user-select:none; -webkit-user-select:none;
+  }
+  #glass-kb.show{ transform:translateY(0); }
+  .kb-row{ display:flex; gap:6px; justify-content:center; }
+  .kb-key{
+    flex:1; max-width:44px; height:44px; border-radius:11px; padding:0;
+    background:rgba(255,255,255,0.3); border:1px solid rgba(255,255,255,0.55);
+    transition:box-shadow .12s ease, background .12s ease;
+  }
+  .kb-key.wide{ max-width:68px; flex:1.6; }
+  .kb-key.on{ background:rgba(255,255,255,0.55); box-shadow:0 0 0 2px rgba(160,215,255,0.85), 0 0 16px rgba(160,215,255,0.8); }
+
   ::selection{ background:rgba(25,51,49,0.2); }
 </style>
 </head>
@@ -456,19 +558,83 @@
 </div>
 
 <div id="chatapp">
-  <div class="cn-top">
-    <div class="cn-title-wrap"><div class="cn-avatar" id="cn-avatar"></div><h1 id="cn-title"></h1></div>
-    <div class="cn-tools"><span class="whoami" id="cn-who"></span><div class="icon-btn" id="cn-signout" title="登出">⎋</div></div>
+  <!-- first-login setup -->
+  <div class="scr" id="scr-setup">
+    <div class="setup-card">
+      <h2>設定你的資料</h2>
+      <p>別人會用「使用者 ID」找到你，聊天時只會顯示你的暱稱，不會顯示 Google 本名或信箱。</p>
+      <label for="su-nick">暱稱</label>
+      <input id="su-nick" maxlength="20" placeholder="例如：小明">
+      <label for="su-handle">使用者 ID（英文小寫、數字、底線，3–20 字）</label>
+      <input id="su-handle" maxlength="20" autocapitalize="none" autocomplete="off" placeholder="例如：xiaoming_01">
+      <div id="su-error"></div>
+      <button class="id-btn" id="su-submit">完成</button>
+    </div>
   </div>
-  <div class="cn-tape-wrap"><div id="cn-tape"></div></div>
-  <div id="cn-ctx"><div><span class="label" id="cn-ctx-label"></span><span id="cn-ctx-text"></span></div><button id="cn-ctx-cancel">✕</button></div>
-  <div class="cn-dock">
-    <textarea id="cn-input" rows="1" placeholder="輸入訊息…"></textarea>
-    <button id="cn-send" title="傳送">➤</button>
+
+  <!-- conversation list -->
+  <div class="scr" id="scr-list">
+    <div class="cn-top">
+      <div class="cn-title-wrap">
+        <div class="cn-avatar" id="me-avatar"></div>
+        <div><h1>聊天</h1><div class="sub" id="me-handle"></div></div>
+      </div>
+      <div class="cn-tools">
+        <div class="icon-btn" id="btn-newchat" title="新增聊天">✎</div>
+        <div class="icon-btn" id="cn-signout" title="登出">⎋</div>
+      </div>
+    </div>
+    <div class="list-search"><input id="list-filter" placeholder="搜尋聊天"></div>
+    <div id="conv-list"></div>
+  </div>
+
+  <!-- one conversation -->
+  <div class="scr" id="scr-chat">
+    <div class="cn-top">
+      <div class="cn-title-wrap">
+        <div class="icon-btn" id="btn-back" title="返回">‹</div>
+        <div class="cn-avatar" id="cn-avatar"></div>
+        <div><h1 id="cn-title"></h1><div class="sub" id="cn-sub"></div></div>
+      </div>
+      <div class="cn-tools"><div class="icon-btn" id="btn-chatmenu" title="更多">⋯</div></div>
+    </div>
+    <div id="chatmenu"><button id="cm-block">封鎖此人</button></div>
+    <div class="cn-tape-wrap"><div id="cn-tape"></div></div>
+    <div id="cn-ctx"><div><span class="label" id="cn-ctx-label"></span><span id="cn-ctx-text"></span></div><button id="cn-ctx-cancel">✕</button></div>
+    <div class="cn-dock">
+      <textarea id="cn-input" rows="1" placeholder="輸入訊息…"></textarea>
+      <button id="cn-send" title="傳送">➤</button>
+    </div>
+  </div>
+
+  <!-- calm water page -->
+  <div class="scr" id="scr-water">
+    <div class="cn-top">
+      <div class="cn-title-wrap"><div><h1>水波</h1><div class="sub">輕觸水面，讓心情沉澱</div></div></div>
+    </div>
+    <div id="water-wrap">
+      <canvas id="water-canvas"></canvas>
+      <div id="water-dbg"></div>
+      <div id="glass-kb" aria-hidden="true"></div>
+    </div>
+  </div>
+
+  <div id="tabbar">
+    <button class="tab-nav active" data-tab="list">💬 聊天</button>
+    <button class="tab-nav" data-tab="water">🌊 水波</button>
   </div>
 </div>
 
-<div id="pw-overlay"><div id="pw-box"><input id="pw-input" type="password" placeholder="••••" autocomplete="off"></div></div>
+<div id="newchat-overlay">
+  <div id="newchat-box">
+    <h2>新增聊天</h2>
+    <p>輸入對方的使用者 ID 來找人。</p>
+    <div class="nc-row"><input id="nc-input" placeholder="@使用者ID" autocapitalize="none" autocomplete="off"><button id="nc-search">搜尋</button></div>
+    <div id="nc-msg"></div>
+    <div id="nc-result"></div>
+  </div>
+</div>
+<div id="toast"></div>
 
 <div id="app">
   <div id="topbar">
@@ -524,7 +690,7 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
   import {
     getFirestore, collection, doc, addDoc, updateDoc, deleteDoc,
-    onSnapshot, query, orderBy, setDoc
+    onSnapshot, query, orderBy, setDoc, getDoc, writeBatch, where, limitToLast
   } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js";
   import {
     getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged
@@ -546,7 +712,7 @@
   const auth = getAuth(fbApp);
 
   window.__fb = { db, auth, collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, setDoc,
-                  GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged };
+                  getDoc, writeBatch, where, limitToLast, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged };
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
 
@@ -930,6 +1096,7 @@ let unsubscribePresence = null;
 
 function enterSecret(){
   secretActive = true;
+  if(typeof Water !== 'undefined') Water.stop();
   document.getElementById('chatapp').style.display = 'none';
   document.getElementById('app').style.display = 'flex';
   document.getElementById('whoami-label').textContent = '身分：' + currentUser;
@@ -964,11 +1131,11 @@ function exitSecret(){
   document.getElementById('preview-row').classList.add('empty');
   document.getElementById('codebook-overlay').style.display = 'none';
   document.getElementById('app').style.display = 'none';
-  if(currentUser) document.getElementById('chatapp').style.display = 'flex';
+  if(typeof me !== 'undefined' && me) document.getElementById('chatapp').style.display = 'flex';
 }
 
 /* leave the secret area instantly when the page is hidden / app switched */
-document.addEventListener('visibilitychange', ()=>{ if(document.hidden) exitSecret(); });
+document.addEventListener('visibilitychange', ()=>{ if(document.hidden){ exitSecret(); if(typeof Water !== 'undefined') Water.reset(); } });
 document.addEventListener('keydown', (e)=>{ if(e.key === 'Escape') exitSecret(); });
 
 function bindSecretUI(){
@@ -1041,113 +1208,542 @@ function attachDoubleTap(el, cb){
   });
 }
 
-/* ================= secret-area password ================= */
-const PW_SALT = "sc-salt-v1:";
-const PW_HASH = "ac0f5d32d76a2184729cfcebe3e3823cd919c821cf787940362f32c95d5084e3";
-let pwTries = 0;
+/* ================= secret-area password (PBKDF2) ================= */
+const PW_SALT = "sc-salt-v2";
+const PW_ITER = 150000;
+const PW_HASH = "a54a5ca55f73a94cb49993a7e4d05e32a2467636ba24e1cb9c7445023c581b3e";
 
-async function sha256hex(s){
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
-  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('');
+async function pwOk(pw){
+  try{
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey('raw', enc.encode(pw), 'PBKDF2', false, ['deriveBits']);
+    const bits = await crypto.subtle.deriveBits(
+      { name:'PBKDF2', salt: enc.encode(PW_SALT), iterations: PW_ITER, hash:'SHA-256' }, key, 256);
+    const hex = [...new Uint8Array(bits)].map(b => b.toString(16).padStart(2,'0')).join('');
+    return hex === PW_HASH;
+  }catch(e){ return false; }
 }
-function openPw(){
-  if(secretActive) return;
-  const ov = document.getElementById('pw-overlay');
-  const inp = document.getElementById('pw-input');
-  ov.style.display = 'flex';
-  inp.value = '';
-  setTimeout(()=> inp.focus(), 50);
+
+/* ================= calm water canvas + hidden gesture lock =================
+   Everyone sees the same relaxing water page. Only the authorised accounts
+   (currentUser !== null) get gesture recognition, and every failure is silent.
+   Stage 1: draw the stick-figure pose (pause ~0.3s at each joint)
+   Stage 2: tap three faint lights in order within 3 seconds
+   Stage 3: type the password on an unlabeled glass keyboard                  */
+const FIG = [[0,0],[.5,.35],[1,0],[.5,.35],[.5,.65],[.15,1],[.5,.65],[.85,1]]; // joints of the pose, unit square
+const FIG_TOL = 0.22;                       // allowed error per joint (fraction of figure size)
+const DWELL_MS = 300;                       // pause time that marks a joint
+const TAP_SEQ = [[.16,.18],[.84,.82],[.84,.18]]; // fractions of canvas width/height, in order
+const TAP_RADIUS = 64, TAP_WINDOW = 3000;
+
+const Water = (function(){
+  const cv = document.getElementById('water-canvas');
+  const ctx = cv.getContext('2d');
+  const kb = document.getElementById('glass-kb');
+  const dbgEl = document.getElementById('water-dbg');
+  let W = 0, H = 0, dpr = 1, parts = [], ripples = [];
+  let raf = 0, running = false;
+  let stage = 'idle', stageT = 0;
+  let down = false, ptr = { x:0, y:0 };
+  let nodes = [], anchor = null, anchorT = 0, anchorFlag = false, lastTrail = null;
+  let tapIdx = 0, buf = '', kbTimer = 0, dbgDots = [], dbgUntil = 0;
+
+  const dist = (a,b)=> Math.hypot(a.x-b.x, a.y-b.y);
+  const gestureOn = ()=> !!currentUser;
+
+  function resize(){
+    const r = cv.parentElement.getBoundingClientRect();
+    if(r.width === 0) return;
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    cv.width = W * dpr; cv.height = H * dpr;
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    if(parts.length === 0){
+      for(let i=0;i<46;i++){
+        parts.push({ x:Math.random()*W, y:Math.random()*H, r:2+Math.random()*5,
+          a:.12+Math.random()*.22, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25,
+          ph:Math.random()*6.28, teal:Math.random()<.4 });
+      }
+    }
+  }
+
+  function addRipple(x,y,max){ ripples.push({ x, y, r:4, max:max||60, a:.55 }); }
+
+  /* ---------- gesture matching ---------- */
+  function matchFigure(ns){
+    if(ns.length < FIG.length || ns.length > FIG.length + 2) return { ok:false, why:'節點數 ' + ns.length + '（需要 ' + FIG.length + '）' };
+    let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
+    for(const p of ns){ minx=Math.min(minx,p.x); maxx=Math.max(maxx,p.x); miny=Math.min(miny,p.y); maxy=Math.max(maxy,p.y); }
+    const w = maxx-minx, h = maxy-miny;
+    if(w < 80 || h < 80) return { ok:false, why:'圖形太小' };
+    const norm = ns.map(p => ({ x:(p.x-minx)/w, y:(p.y-miny)/h }));
+    let j = 0, maxd = 0;
+    for(let i=0;i<FIG.length;i++){
+      let found = false;
+      while(j < norm.length){
+        const d = Math.hypot(norm[j].x - FIG[i][0], norm[j].y - FIG[i][1]);
+        j++;
+        if(d <= FIG_TOL){ found = true; maxd = Math.max(maxd, d); break; }
+      }
+      if(!found) return { ok:false, why:'第 ' + (i+1) + ' 個關節位置不對' };
+    }
+    return { ok:true, maxd };
+  }
+
+  function setDbg(txt){
+    if(!(location.hash === '#debug' && gestureOn())){ dbgEl.style.display = 'none'; return; }
+    dbgEl.textContent = txt; dbgEl.style.display = 'block';
+  }
+
+  function finishStroke(p){
+    if(nodes.length && dist(p, nodes[nodes.length-1]) > 24) nodes.push({ x:p.x, y:p.y });
+    const res = matchFigure(nodes);
+    if(location.hash === '#debug' && gestureOn()){
+      dbgDots = nodes.slice(); dbgUntil = performance.now() + 2500;
+      setDbg('節點 ' + nodes.length + '/' + FIG.length + ' → ' + (res.ok ? '成功（最大誤差 ' + res.maxd.toFixed(2) + '，上限 ' + FIG_TOL + '）' : '失敗：' + res.why));
+    }
+    nodes = [];
+    if(res.ok){ stage = 'converge'; stageT = performance.now(); }
+  }
+
+  /* ---------- taps + keyboard ---------- */
+  function handleTap(p){
+    const t = TAP_SEQ[tapIdx];
+    const target = { x:t[0]*W, y:t[1]*H };
+    if(dist(p, target) <= TAP_RADIUS){
+      addRipple(target.x, target.y, 54);
+      tapIdx++;
+      if(tapIdx >= TAP_SEQ.length) openKeyboard();
+    }else{
+      reset();
+    }
+  }
+  function openKeyboard(){
+    stage = 'keys'; buf = '';
+    kb.classList.add('show');
+    clearTimeout(kbTimer);
+    kbTimer = setTimeout(reset, 25000);
+  }
+  async function submitPw(){
+    const pw = buf; buf = '';
+    const ok = await pwOk(pw);
+    reset();
+    if(ok) enterSecret();
+  }
+  function press(k){
+    if(stage !== 'keys') return;
+    clearTimeout(kbTimer);
+    kbTimer = setTimeout(reset, 25000);
+    if(k === 'bs') buf = buf.slice(0,-1);
+    else if(k === 'enter') submitPw();
+    else if(buf.length < 64) buf += k;
+  }
+
+  function reset(){
+    clearTimeout(kbTimer);
+    const wasActive = stage !== 'idle';
+    stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false;
+    kb.classList.remove('show');
+    if(wasActive) addRipple(W/2, H/2, Math.max(W,H)*0.6);   // the lock just dissolves like a wave
+  }
+
+  /* ---------- loop ---------- */
+  function tick(now){
+    if(!running) return;
+    raf = requestAnimationFrame(tick);
+    if(W === 0){ resize(); return; }
+
+    // dwell detection (finger resting) → joint
+    if(down && stage === 'idle' && gestureOn() && !anchorFlag && anchor && now - anchorT >= DWELL_MS){
+      anchorFlag = true;
+      if(!nodes.length || dist(anchor, nodes[nodes.length-1]) > 24) nodes.push({ x:anchor.x, y:anchor.y });
+      addRipple(anchor.x, anchor.y, 42);
+    }
+
+    ctx.clearRect(0,0,W,H);
+
+    // particles
+    for(const p of parts){
+      p.ph += 0.01;
+      p.x += p.vx + Math.sin(p.ph)*0.12;
+      p.y += p.vy + Math.cos(p.ph*0.8)*0.12;
+      if(stage === 'converge'){ p.x += (W/2 - p.x)*0.05; p.y += (H/2 - p.y)*0.05; }
+      if(down){
+        const dx = p.x - ptr.x, dy = p.y - ptr.y, d = Math.hypot(dx,dy);
+        if(d < 90 && d > 0.1){ p.x += dx/d * (90-d)*0.06; p.y += dy/d * (90-d)*0.06; }
+      }
+      if(p.x < -10) p.x = W+10; if(p.x > W+10) p.x = -10;
+      if(p.y < -10) p.y = H+10; if(p.y > H+10) p.y = -10;
+      ctx.beginPath();
+      ctx.fillStyle = p.teal ? 'rgba(60,130,130,' + (p.a*0.7) + ')' : 'rgba(255,255,255,' + p.a + ')';
+      ctx.arc(p.x, p.y, p.r, 0, 6.283);
+      ctx.fill();
+    }
+
+    // ripples
+    for(let i=ripples.length-1;i>=0;i--){
+      const r = ripples[i];
+      r.r += (r.max - r.r)*0.06 + 0.4;
+      r.a *= 0.955;
+      if(r.a < 0.015 || r.r >= r.max){ ripples.splice(i,1); continue; }
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(255,255,255,' + r.a + ')';
+      ctx.lineWidth = 1.5;
+      ctx.arc(r.x, r.y, r.r, 0, 6.283);
+      ctx.stroke();
+    }
+
+    // stage visuals
+    if(stage === 'converge'){
+      const el = now - stageT;
+      const a = Math.sin(Math.min(el/1100,1) * Math.PI) * 0.9;
+      const bw = 130, bh = 160, ox = W/2 - bw/2, oy = H/2 - bh/2;
+      ctx.beginPath();
+      FIG.forEach((f,i)=>{ const x = ox + f[0]*bw, y = oy + f[1]*bh; i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); });
+      ctx.strokeStyle = 'rgba(255,255,255,' + a + ')';
+      ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.stroke();
+      if(el >= 1100){ stage = 'taps'; stageT = now; tapIdx = 0; }
+    }else if(stage === 'taps'){
+      const el = now - stageT;
+      if(el > TAP_WINDOW){ reset(); }
+      else{
+        const remain = 1 - el/TAP_WINDOW;
+        for(let i=tapIdx;i<TAP_SEQ.length;i++){
+          const x = TAP_SEQ[i][0]*W, y = TAP_SEQ[i][1]*H;
+          const a = 0.55 * remain * (0.75 + 0.25*Math.sin(now/180 + i));
+          const g = ctx.createRadialGradient(x,y,0,x,y,46);
+          g.addColorStop(0, 'rgba(255,255,255,' + a + ')');
+          g.addColorStop(1, 'rgba(255,255,255,0)');
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(x,y,46,0,6.283); ctx.fill();
+        }
+      }
+    }
+
+    // debug dots
+    if(now < dbgUntil){
+      ctx.fillStyle = 'rgba(226,86,74,.8)';
+      dbgDots.forEach(d => { ctx.beginPath(); ctx.arc(d.x,d.y,5,0,6.283); ctx.fill(); });
+    }
+  }
+
+  /* ---------- pointer input ---------- */
+  function pt(e){
+    const r = cv.getBoundingClientRect();
+    return { x:e.clientX - r.left, y:e.clientY - r.top, t:performance.now() };
+  }
+  cv.addEventListener('pointerdown', (e)=>{
+    e.preventDefault();
+    const p = pt(e);
+    ptr = p;
+    addRipple(p.x, p.y, 34);
+    if(stage === 'taps' && gestureOn()){ handleTap(p); return; }
+    if(stage !== 'idle') return;
+    down = true;
+    try{ cv.setPointerCapture(e.pointerId); }catch(_){}
+    nodes = [{ x:p.x, y:p.y }];
+    anchor = p; anchorT = p.t; anchorFlag = false; lastTrail = p;
+    setDbg('');
+  });
+  cv.addEventListener('pointermove', (e)=>{
+    if(!down) return;
+    const p = pt(e);
+    ptr = p;
+    if(lastTrail && dist(p, lastTrail) > 38){ addRipple(p.x, p.y, 26); lastTrail = p; }
+    if(anchor && dist(p, anchor) > 14){ anchor = p; anchorT = p.t; anchorFlag = false; }
+  });
+  function up(e){
+    if(!down) return;
+    down = false;
+    if(stage === 'idle' && gestureOn()) finishStroke(pt(e));
+    else nodes = [];
+  }
+  cv.addEventListener('pointerup', up);
+  cv.addEventListener('pointercancel', ()=>{ down = false; nodes = []; });
+
+  /* ---------- keyboard ---------- */
+  (function buildKb(){
+    const rows = ['1234567890','qwertyuiop','asdfghjkl','zxcvbnm'];
+    let html = '';
+    rows.forEach((row, idx)=>{
+      html += '<div class="kb-row">';
+      for(const ch of row) html += '<button class="kb-key" tabindex="-1" data-k="' + ch + '"></button>';
+      if(idx === 3){
+        html += '<button class="kb-key wide" tabindex="-1" data-k="bs"></button>';
+        html += '<button class="kb-key wide" tabindex="-1" data-k="enter"></button>';
+      }
+      html += '</div>';
+    });
+    kb.innerHTML = html;
+    kb.addEventListener('pointerdown', (e)=>{
+      const k = e.target.closest('.kb-key');
+      if(!k) return;
+      e.preventDefault();
+      k.classList.add('on');
+      setTimeout(()=> k.classList.remove('on'), 140);
+      press(k.dataset.k);
+    });
+  })();
+  document.addEventListener('keydown', (e)=>{
+    if(stage !== 'keys' || e.isComposing) return;
+    if(e.key === 'Escape'){ reset(); return; }
+    if(e.key === 'Enter'){ e.preventDefault(); press('enter'); }
+    else if(e.key === 'Backspace'){ e.preventDefault(); press('bs'); }
+    else if(e.key.length === 1 && /[a-z0-9]/i.test(e.key)){ e.preventDefault(); press(e.key.toLowerCase()); }
+  });
+
+  window.addEventListener('resize', ()=>{ if(running){ parts = []; resize(); } });
+
+  return {
+    start(){
+      if(running) return;
+      running = true; parts = []; ripples = [];
+      requestAnimationFrame(()=>{ resize(); raf = requestAnimationFrame(tick); });
+    },
+    stop(){
+      running = false; cancelAnimationFrame(raf);
+      stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false;
+      clearTimeout(kbTimer); kb.classList.remove('show'); setDbg('');
+    },
+    reset
+  };
+})();
+
+/* ================= Messenger ================= */
+let me = null;            // { uid, handle, nickname }
+let authUser = null;
+let profileCache = {};
+let profilePending = new Set();
+let convs = [];
+let activeConvId = null;
+let msgs = [];
+let myBlocks = new Set();
+let unsubConvs = null, unsubMsgs = null, unsubBlocks = null;
+let chatInitial = true, chatKnownIds = new Set();
+let chatReply = null, chatEdit = null, chatComposing = false, chatBound = false;
+let listFilter = '';
+let ncComposing = false;
+
+const $ = (id) => document.getElementById(id);
+const F = () => window.__fb;
+const userDoc = (uid) => F().doc(F().db, 'users', uid);
+const convCol = () => F().collection(F().db, 'conversations');
+const convDoc = (id) => F().doc(F().db, 'conversations', id);
+const msgCol = (cid) => F().collection(F().db, 'conversations', cid, 'messages');
+const msgRef = (cid, mid) => F().doc(F().db, 'conversations', cid, 'messages', mid);
+
+function initial(name){ return (name || '?').trim().charAt(0).toUpperCase() || '?'; }
+function toast(msg){
+  const t = $('toast');
+  t.textContent = msg; t.style.opacity = '1';
+  clearTimeout(toast._t);
+  toast._t = setTimeout(()=>{ t.style.opacity = '0'; }, 2600);
 }
-function closePw(){
-  document.getElementById('pw-overlay').style.display = 'none';
-  document.getElementById('pw-input').value = '';
+
+function showScreen(name){
+  ['setup','list','chat','water'].forEach(n => $('scr-' + n).classList.toggle('show', n === name));
+  const tb = $('tabbar');
+  tb.style.display = (name === 'list' || name === 'water') ? 'flex' : 'none';
+  tb.querySelectorAll('.tab-nav').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  if(name === 'water') Water.start(); else Water.stop();
 }
-async function submitPw(){
-  const inp = document.getElementById('pw-input');
-  const v = inp.value;
-  if(!v) return;
-  let ok = false;
-  try{ ok = (await sha256hex(PW_SALT + v)) === PW_HASH; }catch(e){ ok = false; }
-  if(ok){
-    pwTries = 0;
-    closePw();
-    enterSecret();
-  }else{
-    pwTries++;
-    inp.value = '';
-    const box = document.getElementById('pw-box');
-    box.classList.remove('shake'); void box.offsetWidth; box.classList.add('shake');
-    if(pwTries >= 3){ pwTries = 0; setTimeout(closePw, 350); }
+
+/* ---------- profiles ---------- */
+function profileOf(uid){ return profileCache[uid] || null; }
+async function loadProfile(uid){
+  if(profileCache[uid] || profilePending.has(uid)) return;
+  profilePending.add(uid);
+  try{
+    const s = await F().getDoc(userDoc(uid));
+    profileCache[uid] = s.exists() ? s.data() : { nickname:'（已停用）', handle:'' };
+  }catch(e){
+    profileCache[uid] = { nickname:'未知使用者', handle:'' };
+  }
+  profilePending.delete(uid);
+  renderConvList();
+  if(activeConvId) renderChatHeader();
+}
+function nameOf(uid){
+  const p = profileOf(uid);
+  if(!p){ loadProfile(uid); return '…'; }
+  return p.nickname;
+}
+
+/* ---------- first-login setup ---------- */
+function showSetup(){
+  $('gate').style.display = 'none';
+  $('chatapp').style.display = 'flex';
+  if(!chatBound){ chatBound = true; bindMessengerUI(); }
+  showScreen('setup');
+}
+async function submitSetup(){
+  const nick = $('su-nick').value.trim();
+  const handle = $('su-handle').value.trim().toLowerCase();
+  const err = $('su-error');
+  err.textContent = '';
+  if(nick.length < 1 || nick.length > 20){ err.textContent = '暱稱需要 1–20 個字。'; return; }
+  if(!/^[a-z0-9_]{3,20}$/.test(handle)){ err.textContent = 'ID 只能用英文小寫、數字、底線，3–20 個字。'; return; }
+  const { db, doc, writeBatch } = F();
+  const batch = writeBatch(db);
+  batch.set(doc(db, 'handles', handle), { uid: authUser.uid });
+  batch.set(doc(db, 'users', authUser.uid), { handle, nickname: nick, createdAt: new Date().toISOString() });
+  try{
+    await batch.commit();
+    me = { uid: authUser.uid, handle, nickname: nick };
+    startMessenger();
+  }catch(e){
+    err.textContent = '這個 ID 已經有人使用了，或發生錯誤（' + (e.code || e.message) + '）。';
   }
 }
 
-/* ================= normal chat ================= */
-const CHAT_COLLECTION = "chat_messages";
-let chatMessages = [];
-let chatKnownIds = new Set();
-let chatInitial = true;
-let chatReply = null;
-let chatEdit = null;
-let chatComposing = false;
-let chatBound = false;
-let unsubscribeChat = null;
+/* ---------- start / stop ---------- */
+function startMessenger(){
+  $('gate').style.display = 'none';
+  if(!secretActive) $('chatapp').style.display = 'flex';
+  $('me-avatar').textContent = initial(me.nickname);
+  $('me-handle').textContent = '@' + me.handle;
+  profileCache[me.uid] = me;
+  if(!chatBound){ chatBound = true; bindMessengerUI(); }
+  showScreen('list');
 
-function chatRef(){ const { db, collection } = window.__fb; return collection(db, CHAT_COLLECTION); }
-function chatDoc(id){ const { db, doc } = window.__fb; return doc(db, CHAT_COLLECTION, id); }
-
-function startChat(){
-  document.getElementById('gate').style.display = 'none';
-  if(!secretActive) document.getElementById('chatapp').style.display = 'flex';
-  const other = OTHER[currentUser];
-  document.getElementById('cn-title').textContent = other;
-  document.getElementById('cn-avatar').textContent = other.charAt(0);
-  document.getElementById('cn-who').textContent = currentUser;
-  if(!chatBound){ chatBound = true; bindChatUI(); }
-
-  if(unsubscribeChat) unsubscribeChat();
-  chatInitial = true;
-  chatKnownIds = new Set();
-  const { onSnapshot, query, orderBy } = window.__fb;
-  unsubscribeChat = onSnapshot(query(chatRef(), orderBy('timestamp')), (snap)=>{
-    chatMessages = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    renderChat();
-  }, (err)=> console.error('chat listener error', err));
+  [unsubConvs, unsubBlocks].forEach(u => u && u());
+  const { onSnapshot, query, where, collection, db } = F();
+  unsubConvs = onSnapshot(query(convCol(), where('members', 'array-contains', me.uid)), (snap)=>{
+    convs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderConvList();
+    if(activeConvId){ renderChatHeader(); markRead(); }
+  }, (err)=> console.error('convs listener', err));
+  unsubBlocks = onSnapshot(collection(db, 'users', me.uid, 'blocks'), (snap)=>{
+    myBlocks = new Set(snap.docs.map(d => d.id));
+    if(activeConvId) renderChatHeader();
+  }, ()=>{});
 }
 
 function stopAll(){
-  if(unsubscribeChat){ unsubscribeChat(); unsubscribeChat = null; }
+  [unsubConvs, unsubMsgs, unsubBlocks].forEach(u => u && u());
+  unsubConvs = unsubMsgs = unsubBlocks = null;
   exitSecret();
-  chatMessages = [];
+  Water.stop();
+  convs = []; msgs = []; activeConvId = null; profileCache = {}; myBlocks = new Set();
   chatReply = null; chatEdit = null;
-  document.getElementById('cn-tape').innerHTML = '';
-  document.getElementById('chatapp').style.display = 'none';
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('pw-overlay').style.display = 'none';
-  document.getElementById('gate').style.display = 'flex';
+  $('conv-list').innerHTML = '';
+  $('cn-tape').innerHTML = '';
+  $('chatapp').style.display = 'none';
+  $('app').style.display = 'none';
+  $('newchat-overlay').style.display = 'none';
+  $('gate').style.display = 'flex';
 }
 
+/* ---------- conversation list ---------- */
+function fmtListTime(iso){
+  if(!iso) return '';
+  const d = new Date(iso), now = new Date();
+  if(d.toDateString() === now.toDateString()) return fmtTime(iso);
+  return (d.getMonth()+1) + '/' + d.getDate();
+}
+function isUnread(c){
+  if(!c.lastMessage || c.lastMessage.senderUid === me.uid) return false;
+  const lr = (c.lastRead || {})[me.uid];
+  return !lr || lr < c.lastMessage.at;
+}
+function renderConvList(){
+  if(!me) return;
+  const el = $('conv-list');
+  let rows = convs
+    .filter(c => c.lastMessage || c.createdBy === me.uid)
+    .map(c => ({ c, other: c.members.find(u => u !== me.uid) || me.uid }));
+  const q = listFilter.trim().toLowerCase();
+  if(q){
+    rows = rows.filter(r => {
+      const p = profileOf(r.other) || {};
+      return (p.nickname || '').toLowerCase().includes(q) || (p.handle || '').includes(q);
+    });
+  }
+  rows.sort((a,b) => (b.c.lastAt || '').localeCompare(a.c.lastAt || ''));
+  if(rows.length === 0){
+    el.innerHTML = '<div class="cn-empty">' + (q ? '找不到符合的聊天' : '還沒有聊天，按右上角 ✎ 輸入朋友的 ID 開始吧') + '</div>';
+    return;
+  }
+  el.innerHTML = rows.map(({c, other}) => {
+    const nm = nameOf(other);
+    const lm = c.lastMessage;
+    const preview = lm ? ((lm.senderUid === me.uid ? '你：' : '') + escapeHTML(lm.text)) : '（尚未傳送訊息）';
+    const unread = isUnread(c);
+    return `<div class="conv-row${unread ? ' unread' : ''}" data-cid="${c.id}">
+      <div class="cn-avatar big">${escapeHTML(initial(nm))}</div>
+      <div class="conv-main"><div class="conv-name">${escapeHTML(nm)}</div><div class="conv-last">${preview}</div></div>
+      <div class="conv-side"><div class="conv-time">${fmtListTime(c.lastAt)}</div>${unread ? '<span class="unread-dot"></span>' : ''}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ---------- open / close a conversation ---------- */
+function otherOfActive(){
+  const c = convs.find(x => x.id === activeConvId);
+  return c ? c.members.find(u => u !== me.uid) : null;
+}
+function renderChatHeader(){
+  const other = otherOfActive();
+  if(!other) return;
+  const nm = nameOf(other), p = profileOf(other);
+  $('cn-title').textContent = nm;
+  $('cn-avatar').textContent = initial(nm);
+  $('cn-sub').textContent = p && p.handle ? '@' + p.handle : '';
+  $('cm-block').textContent = myBlocks.has(other) ? '解除封鎖' : '封鎖此人';
+}
+function openConv(cid){
+  activeConvId = cid; msgs = [];
+  chatInitial = true; chatKnownIds = new Set();
+  chatReply = null; chatEdit = null;
+  hideChatCtx(); $('cn-input').value = ''; $('cn-input').style.height = 'auto';
+  $('cn-tape').innerHTML = '';
+  showScreen('chat');
+  renderChatHeader();
+  const { onSnapshot, query, orderBy, limitToLast } = F();
+  if(unsubMsgs) unsubMsgs();
+  unsubMsgs = onSnapshot(query(msgCol(cid), orderBy('at'), limitToLast(100)), (snap)=>{
+    msgs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    renderChat();
+    markRead();
+  }, (err)=> console.error('msgs listener', err));
+}
+function closeConv(){
+  if(unsubMsgs){ unsubMsgs(); unsubMsgs = null; }
+  activeConvId = null; msgs = [];
+  $('cn-tape').innerHTML = '';
+  $('chatmenu').style.display = 'none';
+  hideChatCtx();
+  showScreen('list');
+}
+function markRead(){
+  const c = convs.find(x => x.id === activeConvId);
+  if(!c || !c.lastMessage || c.lastMessage.senderUid === me.uid) return;
+  const lr = (c.lastRead || {})[me.uid];
+  if(lr && lr >= c.lastMessage.at) return;
+  F().updateDoc(convDoc(c.id), { ['lastRead.' + me.uid]: new Date().toISOString() }).catch(()=>{});
+}
+
+/* ---------- message tape ---------- */
 function renderChat(){
-  const tape = document.getElementById('cn-tape');
+  const tape = $('cn-tape');
   const nearBottom = tape.scrollHeight - tape.scrollTop - tape.clientHeight < 80;
-  if(chatMessages.length === 0){
+  if(msgs.length === 0){
     tape.innerHTML = '<div class="cn-empty">還沒有訊息，說聲嗨吧 👋</div>';
     chatInitial = false;
     return;
   }
-  let html = '';
-  let prevDay = '';
-  let lastIsSelf = false;
-  for(const m of chatMessages){
-    const self = m.sender === currentUser;
-    lastIsSelf = self;
-    const day = new Date(m.timestamp).toLocaleDateString('zh-TW', { month:'long', day:'numeric', weekday:'short' });
+  let html = '', prevDay = '', lastSelf = false;
+  for(const m of msgs){
+    const self = m.senderUid === me.uid;
+    lastSelf = self;
+    const day = new Date(m.at).toLocaleDateString('zh-TW', { month:'long', day:'numeric', weekday:'short' });
     if(day !== prevDay){ html += `<div class="cn-day">${day}</div>`; prevDay = day; }
-
     let chip = '';
     if(m.replyTo){
-      const t = chatMessages.find(x => x.id === m.replyTo);
+      const t = msgs.find(x => x.id === m.replyTo);
       chip = t
-        ? `<div class="cn-reply" data-jump="${t.id}">↩ ${escapeHTML(t.sender)}：${escapeHTML(t.text.slice(0,20))}${t.text.length>20?'…':''}</div>`
+        ? `<div class="cn-reply" data-jump="${t.id}">↩ ${t.senderUid === me.uid ? '你' : escapeHTML(nameOf(t.senderUid))}：${escapeHTML(t.text.slice(0,20))}${t.text.length > 20 ? '…' : ''}</div>`
         : `<div class="cn-reply">↩ 原訊息已刪除</div>`;
     }
     const isNew = (!chatInitial && !chatKnownIds.has(m.id)) ? ' new-in' : '';
@@ -1156,56 +1752,122 @@ function renderChat(){
       acts.push(`<button class="act-btn" data-cact="edit" data-id="${m.id}">編輯</button>`);
       acts.push(`<button class="act-btn" data-cact="delete" data-id="${m.id}">刪除</button>`);
     }
-    html += `<div class="cn-row ${self?'self':'other'}${isNew}" id="cm-${m.id}">
+    html += `<div class="cn-row ${self ? 'self' : 'other'}${isNew}" id="cm-${m.id}">
       ${chip}
       <div class="cn-bubble">${escapeHTML(m.text)}</div>
-      <div class="cn-meta">${fmtTime(m.timestamp)}${m.isEdited ? ' · 已編輯' : ''}</div>
+      <div class="cn-meta">${fmtTime(m.at)}${m.isEdited ? ' · 已編輯' : ''}</div>
       <div class="cn-actions">${acts.join('')}</div>
     </div>`;
   }
   tape.innerHTML = html;
-  if(chatInitial || nearBottom || lastIsSelf) tape.scrollTop = tape.scrollHeight;
-  chatKnownIds = new Set(chatMessages.map(m => m.id));
+  if(chatInitial || nearBottom || lastSelf) tape.scrollTop = tape.scrollHeight;
+  chatKnownIds = new Set(msgs.map(m => m.id));
   chatInitial = false;
 }
 
 function showChatCtx(label, text){
-  document.getElementById('cn-ctx-label').textContent = label;
-  document.getElementById('cn-ctx-text').textContent = text;
-  document.getElementById('cn-ctx').style.display = 'flex';
+  $('cn-ctx-label').textContent = label;
+  $('cn-ctx-text').textContent = text;
+  $('cn-ctx').style.display = 'flex';
 }
 function hideChatCtx(){
-  document.getElementById('cn-ctx').style.display = 'none';
+  $('cn-ctx').style.display = 'none';
   chatReply = null; chatEdit = null;
 }
 
 async function sendChat(){
-  const input = document.getElementById('cn-input');
+  if(!activeConvId) return;
+  const input = $('cn-input');
   const val = input.value.trim();
   if(!val) return;
-  const { addDoc, updateDoc } = window.__fb;
+  if(val.length > 2000){ toast('訊息太長了（上限 2000 字）'); return; }
+  const other = otherOfActive();
+  if(other && myBlocks.has(other)){ toast('你已封鎖對方，解除封鎖後才能傳訊息'); return; }
+  const now = new Date().toISOString();
   try{
     if(chatEdit){
-      await updateDoc(chatDoc(chatEdit.id), { text: val, isEdited: true });
+      await F().updateDoc(msgRef(activeConvId, chatEdit.id), { text: val, isEdited: true });
     }else{
-      await addDoc(chatRef(), {
-        sender: currentUser,
-        text: val,
-        timestamp: new Date().toISOString(),
-        isEdited: false,
-        replyTo: chatReply ? chatReply.id : null
+      const ref = F().doc(msgCol(activeConvId));
+      const batch = F().writeBatch(F().db);
+      batch.set(ref, { senderUid: me.uid, text: val, at: now, isEdited: false, replyTo: chatReply ? chatReply.id : null });
+      batch.update(convDoc(activeConvId), {
+        lastMessage: { text: val.slice(0, 80), senderUid: me.uid, at: now },
+        lastAt: now,
+        ['lastRead.' + me.uid]: now
       });
+      await batch.commit();
     }
-  }catch(e){ console.error('chat send failed', e); return; }
-  input.value = '';
-  input.style.height = 'auto';
+  }catch(e){
+    console.error('send failed', e);
+    toast('無法傳送這則訊息');
+    return;
+  }
+  input.value = ''; input.style.height = 'auto';
   hideChatCtx();
 }
 
-function bindChatUI(){
-  const tape = document.getElementById('cn-tape');
-  const input = document.getElementById('cn-input');
+async function toggleBlock(){
+  const other = otherOfActive();
+  if(!other) return;
+  const { db, doc, setDoc, deleteDoc } = F();
+  const ref = doc(db, 'users', me.uid, 'blocks', other);
+  try{
+    if(myBlocks.has(other)){ await deleteDoc(ref); toast('已解除封鎖'); }
+    else{
+      if(!confirm('封鎖之後，對方就不能再傳訊息給你。確定嗎？')) return;
+      await setDoc(ref, { at: new Date().toISOString() });
+      toast('已封鎖');
+    }
+  }catch(e){ toast('操作失敗'); }
+  $('chatmenu').style.display = 'none';
+}
 
+/* ---------- new chat ---------- */
+function openNewChat(){
+  $('newchat-overlay').style.display = 'flex';
+  $('nc-input').value = ''; $('nc-msg').textContent = ''; $('nc-result').innerHTML = '';
+  setTimeout(()=> $('nc-input').focus(), 50);
+}
+function closeNewChat(){ $('newchat-overlay').style.display = 'none'; }
+async function ncSearch(){
+  const h = $('nc-input').value.trim().toLowerCase().replace(/^@/, '');
+  const msg = $('nc-msg'), res = $('nc-result');
+  msg.textContent = ''; res.innerHTML = '';
+  if(!/^[a-z0-9_]{3,20}$/.test(h)){ msg.textContent = 'ID 是 3–20 個英文小寫、數字或底線。'; return; }
+  try{
+    const hs = await F().getDoc(F().doc(F().db, 'handles', h));
+    if(!hs.exists()){ msg.textContent = '找不到這個 ID。'; return; }
+    const uid = hs.data().uid;
+    if(uid === me.uid){ msg.textContent = '這是你自己的 ID 😄'; return; }
+    const us = await F().getDoc(userDoc(uid));
+    if(!us.exists()){ msg.textContent = '找不到這個使用者。'; return; }
+    profileCache[uid] = us.data();
+    res.innerHTML = `<div class="conv-row" data-uid="${uid}">
+      <div class="cn-avatar big">${escapeHTML(initial(us.data().nickname))}</div>
+      <div class="conv-main"><div class="conv-name">${escapeHTML(us.data().nickname)}</div><div class="conv-last">@${escapeHTML(us.data().handle)}</div></div>
+      <div class="conv-side"><div class="conv-time">開始聊天 ›</div></div>
+    </div>`;
+  }catch(e){ msg.textContent = '搜尋失敗（' + (e.code || e.message) + '）。'; }
+}
+async function startDm(uid){
+  const id = [me.uid, uid].sort().join('_');
+  if(!convs.find(c => c.id === id)){
+    const now = new Date().toISOString();
+    try{
+      await F().setDoc(convDoc(id), {
+        type:'dm', members:[me.uid, uid].sort(), createdBy: me.uid, createdAt: now,
+        lastMessage: null, lastAt: now, lastRead: {}
+      });
+    }catch(e){ toast('無法開始這個聊天'); return; }
+  }
+  closeNewChat();
+  openConv(id);
+}
+
+/* ---------- UI wiring ---------- */
+function bindMessengerUI(){
+  const input = $('cn-input');
   input.addEventListener('compositionstart', ()=>{ chatComposing = true; });
   input.addEventListener('compositionend', ()=>{ chatComposing = false; });
   input.addEventListener('input', ()=>{
@@ -1214,25 +1876,21 @@ function bindChatUI(){
   });
   input.addEventListener('keydown', (e)=>{
     if(e.key === 'Enter' && !e.shiftKey && !chatComposing && !e.isComposing && e.keyCode !== 229){
-      e.preventDefault();
-      sendChat();
+      e.preventDefault(); sendChat();
     }
   });
-  document.getElementById('cn-send').addEventListener('click', sendChat);
-  document.getElementById('cn-ctx-cancel').addEventListener('click', ()=>{
-    hideChatCtx();
-    input.value = '';
-  });
+  $('cn-send').addEventListener('click', sendChat);
+  $('cn-ctx-cancel').addEventListener('click', ()=>{ hideChatCtx(); input.value = ''; });
 
-  tape.addEventListener('click', async (e)=>{
+  $('cn-tape').addEventListener('click', async (e)=>{
     const btn = e.target.closest('[data-cact]');
     if(btn){
-      const m = chatMessages.find(x => x.id === btn.dataset.id);
+      const m = msgs.find(x => x.id === btn.dataset.id);
       if(!m) return;
       const act = btn.dataset.cact;
       if(act === 'reply'){
         chatReply = m; chatEdit = null;
-        showChatCtx('回覆：', m.text.slice(0,24) + (m.text.length>24?'…':''));
+        showChatCtx('回覆：', m.text.slice(0,24) + (m.text.length > 24 ? '…' : ''));
         input.focus();
       }else if(act === 'edit'){
         chatEdit = m; chatReply = null;
@@ -1241,59 +1899,82 @@ function bindChatUI(){
         input.focus();
       }else if(act === 'delete'){
         if(confirm('要刪除這則訊息嗎？')){
-          try{ await window.__fb.deleteDoc(chatDoc(m.id)); }catch(err){ console.error(err); }
+          try{ await F().deleteDoc(msgRef(activeConvId, m.id)); }catch(err){ toast('刪除失敗'); }
         }
       }
       return;
     }
     const chip = e.target.closest('.cn-reply[data-jump]');
     if(chip){
-      const t = document.getElementById('cm-' + chip.dataset.jump);
+      const t = $('cm-' + chip.dataset.jump);
       if(t) t.scrollIntoView({ behavior:'smooth', block:'center' });
       return;
     }
     const row = e.target.closest('.cn-row');
     if(row){
       const wasOpen = row.classList.contains('open');
-      tape.querySelectorAll('.cn-row.open').forEach(r => r.classList.remove('open'));
+      $('cn-tape').querySelectorAll('.cn-row.open').forEach(r => r.classList.remove('open'));
       if(!wasOpen) row.classList.add('open');
     }
   });
 
-  document.getElementById('cn-signout').addEventListener('click', ()=>{
-    if(confirm('要登出嗎？')) window.__fb.signOut(window.__fb.auth);
+  $('btn-back').addEventListener('click', closeConv);
+  $('btn-chatmenu').addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const m = $('chatmenu');
+    m.style.display = m.style.display === 'block' ? 'none' : 'block';
+  });
+  document.addEventListener('click', ()=>{ $('chatmenu').style.display = 'none'; });
+  $('cm-block').addEventListener('click', toggleBlock);
+
+  $('btn-newchat').addEventListener('click', openNewChat);
+  $('newchat-overlay').addEventListener('click', (e)=>{ if(e.target.id === 'newchat-overlay') closeNewChat(); });
+  $('nc-search').addEventListener('click', ncSearch);
+  $('nc-input').addEventListener('compositionstart', ()=>{ ncComposing = true; });
+  $('nc-input').addEventListener('compositionend', ()=>{ ncComposing = false; });
+  $('nc-input').addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && !ncComposing && !e.isComposing){ e.preventDefault(); ncSearch(); }
+  });
+  $('nc-result').addEventListener('click', (e)=>{
+    const row = e.target.closest('.conv-row[data-uid]');
+    if(row) startDm(row.dataset.uid);
   });
 
-  /* hidden trigger: double-tap on empty space in the chat */
-  attachDoubleTap(tape, openPw);
+  $('list-filter').addEventListener('input', (e)=>{ listFilter = e.target.value; renderConvList(); });
+  $('conv-list').addEventListener('click', (e)=>{
+    const row = e.target.closest('.conv-row[data-cid]');
+    if(row) openConv(row.dataset.cid);
+  });
 
-  const pwInput = document.getElementById('pw-input');
-  pwInput.addEventListener('keydown', (e)=>{
-    if(e.key === 'Enter' && !e.isComposing){ e.preventDefault(); submitPw(); }
+  $('cn-signout').addEventListener('click', ()=>{
+    if(confirm('要登出嗎？')) F().signOut(F().auth);
   });
-  document.getElementById('pw-overlay').addEventListener('click', (e)=>{
-    if(e.target.id === 'pw-overlay') closePw();
-  });
+
+  document.querySelectorAll('.tab-nav').forEach(b => b.addEventListener('click', ()=> showScreen(b.dataset.tab)));
+
+  $('su-submit').addEventListener('click', submitSetup);
+  ['su-nick','su-handle'].forEach(id => $(id).addEventListener('keydown', (e)=>{
+    if(e.key === 'Enter' && !e.isComposing){ e.preventDefault(); submitSetup(); }
+  }));
 }
 
 /* ================= Google sign-in ================= */
 function showGateError(msg){
-  const el = document.getElementById('email-error');
+  const el = $('email-error');
   el.textContent = msg;
   el.style.display = msg ? 'block' : 'none';
 }
-
 function whenFirebase(cb){
   if(window.__fb) cb();
   else window.addEventListener('firebase-ready', cb, { once:true });
 }
 
-document.getElementById('google-login').addEventListener('click', ()=>{
+$('google-login').addEventListener('click', ()=>{
   whenFirebase(async ()=>{
     showGateError('');
-    const { auth, GoogleAuthProvider, signInWithPopup } = window.__fb;
+    const { auth, GoogleAuthProvider, signInWithPopup } = F();
     const provider = new GoogleAuthProvider();
-    provider.setCustomParameters({ prompt: 'select_account' });
+    provider.setCustomParameters({ prompt:'select_account' });
     try{
       await signInWithPopup(auth, provider);
     }catch(e){
@@ -1305,21 +1986,27 @@ document.getElementById('google-login').addEventListener('click', ()=>{
 });
 
 whenFirebase(()=>{
-  const { auth, onAuthStateChanged, signOut } = window.__fb;
-  onAuthStateChanged(auth, (user)=>{
+  const { auth, onAuthStateChanged, signOut, getDoc } = F();
+  onAuthStateChanged(auth, async (user)=>{
     if(!user){
-      currentUser = null;
+      authUser = null; me = null; currentUser = null;
       stopAll();
       return;
     }
-    const name = resolveUserByEmail(user.email);
-    if(!name || user.emailVerified === false){
-      showGateError('這個 Google 帳號（' + user.email + '）沒有權限進入。');
+    if(user.emailVerified === false){
+      showGateError('這個 Google 帳號的信箱尚未驗證。');
       signOut(auth);
       return;
     }
-    currentUser = name;
-    startChat();
+    authUser = user;
+    currentUser = resolveUserByEmail(user.email);   // secret-area identity, or null for everyone else
+    try{
+      const s = await getDoc(userDoc(user.uid));
+      if(s.exists()){ me = { uid: user.uid, ...s.data() }; startMessenger(); }
+      else showSetup();
+    }catch(e){
+      showGateError('讀取資料失敗（' + (e.code || e.message) + '），請確認 Firestore 規則已發布。');
+    }
   });
 });
 </script>
