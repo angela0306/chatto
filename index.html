@@ -1276,7 +1276,7 @@ function attachDoubleTap(el, cb){
 /* ================= secret-area password (PBKDF2) ================= */
 const PW_SALT = "sc-salt-v2";
 const PW_ITER = 150000;
-const PW_HASH = "a54a5ca55f73a94cb49993a7e4d05e32a2467636ba24e1cb9c7445023c581b3e";
+const PW_HASH = "5d143eadf30ef55e4ad5359443cb30316a44fb11c5e6a57406e461a6ad025e78";
 
 async function pwOk(pw){
   try{
@@ -1295,7 +1295,20 @@ async function pwOk(pw){
    Stage 1: draw the stick-figure pose (pause ~0.3s at each joint)
    Stage 2: tap three faint lights in order within 3 seconds
    Stage 3: type the password on an unlabeled glass keyboard                  */
-const FIG = [[0,0],[.5,.35],[1,0],[.5,.35],[.5,.65],[.15,1],[.5,.65],[.85,1]]; // joints of the pose, unit square
+function normFig(raw){
+  const xs = raw.map(p => p[0]), ys = raw.map(p => p[1]);
+  const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
+  return raw.map(p => [(p[0]-x0)/(x1-x0), (p[1]-y0)/(y1-y0)]);
+}
+// Two strokes, in order: the pose of "A", then the pose of "E". Each list is the joints you pause on.
+const FIG_LETTERS = ['A', 'E'];
+const FIGS = [
+  // A: left elbow -> neck -> right elbow -> neck -> hip -> left foot -> hip -> right foot
+  normFig([[.27,.07],[.49,.33],[.65,.05],[.49,.33],[.47,.60],[.28,.84],[.47,.60],[.62,.82]]),
+  // E: right hand -> neck -> left hand -> hip -> left foot -> hip -> bottom foot
+  normFig([[.60,.20],[.42,.34],[.28,.27],[.41,.47],[.25,.65],[.41,.47],[.41,.80]])
+];
+const STROKE_GAP_MS = 6000;               // time allowed between the two strokes
 const FIG_TOL = 0.22;                       // allowed error per joint (fraction of figure size)
 const DWELL_MS = 300;                       // pause time that marks a joint
 const TAP_SEQ = [[.16,.18],[.84,.82],[.84,.18]]; // fractions of canvas width/height, in order
@@ -1312,6 +1325,7 @@ const Water = (function(){
   let down = false, ptr = { x:0, y:0 };
   let nodes = [], anchor = null, anchorT = 0, anchorFlag = false, lastTrail = null;
   let tapIdx = 0, buf = '', kbTimer = 0, dbgDots = [], dbgUntil = 0;
+  let figIdx = 0, strokeDeadline = 0;
 
   const dist = (a,b)=> Math.hypot(a.x-b.x, a.y-b.y);
   const gestureOn = ()=> !!currentUser;
@@ -1335,18 +1349,18 @@ const Water = (function(){
   function addRipple(x,y,max){ ripples.push({ x, y, r:4, max:max||60, a:.55 }); }
 
   /* ---------- gesture matching ---------- */
-  function matchFigure(ns){
-    if(ns.length < FIG.length || ns.length > FIG.length + 2) return { ok:false, why:'節點數 ' + ns.length + '（需要 ' + FIG.length + '）' };
+  function matchFigure(ns, tpl){
+    if(ns.length < tpl.length || ns.length > tpl.length + 2) return { ok:false, why:'節點數 ' + ns.length + '（需要 ' + tpl.length + '）' };
     let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
     for(const p of ns){ minx=Math.min(minx,p.x); maxx=Math.max(maxx,p.x); miny=Math.min(miny,p.y); maxy=Math.max(maxy,p.y); }
     const w = maxx-minx, h = maxy-miny;
     if(w < 80 || h < 80) return { ok:false, why:'圖形太小' };
     const norm = ns.map(p => ({ x:(p.x-minx)/w, y:(p.y-miny)/h }));
     let j = 0, maxd = 0;
-    for(let i=0;i<FIG.length;i++){
+    for(let i=0;i<tpl.length;i++){
       let found = false;
       while(j < norm.length){
-        const d = Math.hypot(norm[j].x - FIG[i][0], norm[j].y - FIG[i][1]);
+        const d = Math.hypot(norm[j].x - tpl[i][0], norm[j].y - tpl[i][1]);
         j++;
         if(d <= FIG_TOL){ found = true; maxd = Math.max(maxd, d); break; }
       }
@@ -1362,13 +1376,18 @@ const Water = (function(){
 
   function finishStroke(p){
     if(nodes.length && dist(p, nodes[nodes.length-1]) > 24) nodes.push({ x:p.x, y:p.y });
-    const res = matchFigure(nodes);
+    const idx = figIdx;
+    const res = matchFigure(nodes, FIGS[idx]);
     if(location.hash === '#debug' && gestureOn()){
       dbgDots = nodes.slice(); dbgUntil = performance.now() + 2500;
-      setDbg('節點 ' + nodes.length + '/' + FIG.length + ' → ' + (res.ok ? '成功（最大誤差 ' + res.maxd.toFixed(2) + '，上限 ' + FIG_TOL + '）' : '失敗：' + res.why));
+      setDbg('第 ' + (idx+1) + ' 筆（' + FIG_LETTERS[idx] + '）：節點 ' + nodes.length + '/' + FIGS[idx].length + ' → ' +
+        (res.ok ? '成功（最大誤差 ' + res.maxd.toFixed(2) + '，上限 ' + FIG_TOL + '）' : '失敗：' + res.why));
     }
     nodes = [];
-    if(res.ok){ stage = 'converge'; stageT = performance.now(); }
+    if(!res.ok){ figIdx = 0; return; }          // wrong pose: silently start over
+    figIdx++;
+    if(figIdx >= FIGS.length){ figIdx = 0; stage = 'converge'; stageT = performance.now(); }
+    else strokeDeadline = performance.now() + STROKE_GAP_MS;
   }
 
   /* ---------- taps + keyboard ---------- */
@@ -1407,7 +1426,7 @@ const Water = (function(){
   function reset(){
     clearTimeout(kbTimer);
     const wasActive = stage !== 'idle';
-    stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false;
+    stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false; figIdx = 0;
     kb.classList.remove('show');
     if(wasActive) addRipple(W/2, H/2, Math.max(W,H)*0.6);   // the lock just dissolves like a wave
   }
@@ -1424,6 +1443,8 @@ const Water = (function(){
       if(!nodes.length || dist(anchor, nodes[nodes.length-1]) > 24) nodes.push({ x:anchor.x, y:anchor.y });
       addRipple(anchor.x, anchor.y, 42);
     }
+
+    if(figIdx > 0 && stage === 'idle' && !down && now > strokeDeadline) figIdx = 0;
 
     ctx.clearRect(0,0,W,H);
 
@@ -1462,12 +1483,15 @@ const Water = (function(){
     if(stage === 'converge'){
       const el = now - stageT;
       const a = Math.sin(Math.min(el/1100,1) * Math.PI) * 0.9;
-      const bw = 130, bh = 160, ox = W/2 - bw/2, oy = H/2 - bh/2;
-      ctx.beginPath();
-      FIG.forEach((f,i)=>{ const x = ox + f[0]*bw, y = oy + f[1]*bh; i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); });
+      const bw = 90, bh = 150, oy = H/2 - bh/2;
       ctx.strokeStyle = 'rgba(255,255,255,' + a + ')';
       ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.stroke();
+      FIGS.forEach((tpl, k)=>{
+        const ox = W/2 + (k === 0 ? -bw - 12 : 12);
+        ctx.beginPath();
+        tpl.forEach((f,i)=>{ const x = ox + f[0]*bw, y = oy + f[1]*bh; i ? ctx.lineTo(x,y) : ctx.moveTo(x,y); });
+        ctx.stroke();
+      });
       if(el >= 1100){ stage = 'taps'; stageT = now; tapIdx = 0; }
     }else if(stage === 'taps'){
       const el = now - stageT;
@@ -1509,7 +1533,7 @@ const Water = (function(){
     try{ cv.setPointerCapture(e.pointerId); }catch(_){}
     nodes = [{ x:p.x, y:p.y }];
     anchor = p; anchorT = p.t; anchorFlag = false; lastTrail = p;
-    setDbg('');
+    if(figIdx === 0) setDbg('');
   });
   cv.addEventListener('pointermove', (e)=>{
     if(!down) return;
@@ -1568,7 +1592,7 @@ const Water = (function(){
     },
     stop(){
       running = false; cancelAnimationFrame(raf);
-      stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false;
+      stage = 'idle'; tapIdx = 0; buf = ''; nodes = []; down = false; figIdx = 0;
       clearTimeout(kbTimer); kb.classList.remove('show'); setDbg('');
     },
     reset
